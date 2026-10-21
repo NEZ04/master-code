@@ -1,0 +1,19 @@
+{
+  "name": "master-code-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Master Code API: auth, problems, submissions, judging and AI hints",
+  "scripts": {
+    "start": "node src/index.js",
+    "seed": "node src/seed.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "master-code-judge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sandboxed code runner for Master Code (no external dependencies)",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=20" }
+}

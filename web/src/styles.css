@@ -1,0 +1,82 @@
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #1c2430;
+  --muted: #6b7686;
+  --border: #dde2e8;
+  --accent: #2f6fde;
+  --ok: #1b8a4b;
+  --bad: #c53b3b;
+  --code-bg: #f1f3f6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12161c;
+    --card: #1a2029;
+    --text: #e3e8ef;
+    --muted: #8e99a8;
+    --border: #2c3542;
+    --accent: #6b9cf0;
+    --ok: #4cc283;
+    --bad: #ef7b7b;
+    --code-bg: #10151c;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.topbar { display: flex; align-items: center; gap: 24px; padding: 12px 24px; background: var(--card); border-bottom: 1px solid var(--border); }
+.brand { font-weight: 700; font-size: 18px; color: var(--text); }
+.topbar nav { display: flex; gap: 16px; flex: 1; }
+.topbar nav a.active { font-weight: 600; }
+.account { display: flex; gap: 12px; align-items: center; }
+main { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.narrow { max-width: 380px; margin: 40px auto; display: grid; gap: 12px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+
+h1 { font-size: 22px; margin: 0 0 12px; }
+h3 { font-size: 15px; margin: 16px 0 6px; }
+.muted { color: var(--muted); }
+.error { color: var(--bad); }
+.ok { color: var(--ok); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+
+label { display: grid; gap: 4px; font-size: 14px; }
+input, select, textarea { font: inherit; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); color: var(--text); }
+button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; }
+button:disabled { opacity: 0.6; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.danger { color: var(--bad); }
+button.link { border: none; background: none; padding: 0; color: var(--accent); }
+
+.table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.table th, .table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.badge { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--code-bg); }
+.badge.easy { color: var(--ok); }
+.badge.medium { color: #c98a0c; }
+.badge.hard { color: var(--bad); }
+
+pre { background: var(--code-bg); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 4px 0; font-size: 13px; }
+.statement { white-space: pre-wrap; background: none; padding: 0; font-family: inherit; font-size: 15px; }
+.io { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: start; margin-bottom: 8px; }
+.sample .io { grid-template-columns: 1fr 1fr; }
+.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.toolbar input { flex: 1; }
+.editor { width: 100%; min-height: 380px; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 14px; tab-size: 4; resize: vertical; }
+.result { margin-top: 12px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
+.verdict.ok { color: var(--ok); }
+.verdict.bad { color: var(--bad); }
+.stderr { color: var(--bad); }
+.assistant { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 8px; }
+.hint { white-space: pre-wrap; background: var(--code-bg); padding: 12px; border-radius: 6px; }
+fieldset { border: 1px solid var(--border); border-radius: 8px; margin: 12px 0; }
+.row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+form.card > label { margin-bottom: 12px; }

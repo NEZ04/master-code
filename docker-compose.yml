@@ -1,0 +1,77 @@
+# docker compose up --build      -> app on http://127.0.0.1:${WEB_PORT:-8080}
+# docker compose --profile test run --rm api-test   -> API tests against real Mongo + judge
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  judge:
+    build: ./judge
+    environment:
+      MAX_CONCURRENT: 4
+    # Untrusted code runs here: no internet, read-only filesystem, capped memory and processes.
+    networks: [judge-net]
+    read_only: true
+    tmpfs:
+      - /tmp:exec,mode=1777,size=268435456
+    mem_limit: 1g
+    pids_limit: 256
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  api:
+    build: ./server
+    environment:
+      MONGO_URL: mongodb://mongo:27017/mastercode
+      JUDGE_URL: http://judge:7000
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
+      JWT_SECRET: ${JWT_SECRET:-change-me-local-only-secret}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@mastercode.dev}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin12345}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks: [backend, judge-net, default]
+    depends_on:
+      mongo:
+        condition: service_healthy
+      judge:
+        condition: service_started
+
+  web:
+    build: ./web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    networks: [backend]
+    depends_on: [api]
+
+  api-test:
+    profiles: [test]
+    build: ./server
+    command: ["npm", "test"]
+    environment:
+      NODE_ENV: test
+      MONGO_URL: mongodb://mongo:27017/mastercode_test
+      JUDGE_URL: http://judge:7000
+    networks: [backend, judge-net]
+    depends_on:
+      mongo:
+        condition: service_healthy
+      judge:
+        condition: service_started
+
+networks:
+  backend:
+  # internal: containers on it can talk to each other but not to the internet
+  judge-net:
+    internal: true
+
+volumes:
+  mongo-data:
